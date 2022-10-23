@@ -19,7 +19,17 @@
 #include <QCoreApplication>
 
 class ToolLib;
-
+struct noteInfo
+{
+  int year;
+  int month;
+  int day;
+  int hour;
+  int minute;
+  QString title;
+  QString descryption;
+  bool needAlarm;
+};
 struct position
 {
   int x;
@@ -71,6 +81,26 @@ private:
   position layoutPos;
   QString labelText;
   QGridLayout *calendarMainWidget;
+};
+
+class NoteCell : public QWidget
+{
+  Q_OBJECT
+public:
+  NoteCell(QWidget *parent = 0);
+
+  ~NoteCell();
+
+  void setNoteInfo(noteInfo m_info);
+  int getMonth() { return this->info.month; };
+  int getYear() { return this->info.year; };
+  int getHour() { return this->info.hour; };
+  int getMinute() { return this->info.minute; };
+  int getDay() { return this->info.day; };
+  bool getNeedAlarm() { return this->info.needAlarm; };
+
+private:
+  noteInfo info;
 };
 
 #endif // TOOLCELL_H

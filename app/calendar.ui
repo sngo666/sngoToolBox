@@ -16,9 +16,9 @@
   <widget class="QWidget" name="calendarWidget" native="true">
    <property name="geometry">
     <rect>
-     <x>88</x>
+     <x>100</x>
      <y>192</y>
-     <width>821</width>
+     <width>833</width>
      <height>475</height>
     </rect>
    </property>
@@ -28,29 +28,53 @@
    <widget class="QWidget" name="noteWidget" native="true">
     <property name="geometry">
      <rect>
-      <x>560</x>
-      <y>50</y>
-      <width>253</width>
-      <height>417</height>
+      <x>564</x>
+      <y>48</y>
+      <width>261</width>
+      <height>425</height>
      </rect>
     </property>
     <widget class="QWidget" name="verticalLayoutWidget">
      <property name="geometry">
       <rect>
-       <x>0</x>
-       <y>0</y>
+       <x>4</x>
+       <y>8</y>
        <width>253</width>
-       <height>417</height>
+       <height>413</height>
       </rect>
      </property>
-     <layout class="QVBoxLayout" name="noteMenu"/>
+     <layout class="QVBoxLayout" name="noteMenu" stretch="1,15">
+      <item>
+       <widget class="QWidget" name="noteWidgetMenu" native="true"/>
+      </item>
+      <item>
+       <widget class="QWidget" name="noteList" native="true">
+        <widget class="QListWidget" name="noteListWidget">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>0</y>
+           <width>251</width>
+           <height>380</height>
+          </rect>
+         </property>
+         <property name="verticalScrollMode">
+          <enum>QAbstractItemView::ScrollPerPixel</enum>
+         </property>
+         <property name="horizontalScrollMode">
+          <enum>QAbstractItemView::ScrollPerPixel</enum>
+         </property>
+        </widget>
+       </widget>
+      </item>
+     </layout>
     </widget>
    </widget>
    <widget class="QWidget" name="calendarFormWidget" native="true">
     <property name="geometry">
      <rect>
-      <x>0</x>
-      <y>49</y>
+      <x>8</x>
+      <y>48</y>
       <width>551</width>
       <height>425</height>
      </rect>
@@ -475,8 +499,8 @@
    <widget class="QLabel" name="Datelabel">
     <property name="geometry">
      <rect>
-      <x>8</x>
-      <y>8</y>
+      <x>20</x>
+      <y>0</y>
       <width>281</width>
       <height>33</height>
      </rect>
@@ -488,8 +512,8 @@
    <widget class="QLabel" name="weekLabel">
     <property name="geometry">
      <rect>
-      <x>296</x>
-      <y>8</y>
+      <x>304</x>
+      <y>0</y>
       <width>253</width>
       <height>33</height>
      </rect>
@@ -501,8 +525,8 @@
    <widget class="QWidget" name="menuBar" native="true">
     <property name="geometry">
      <rect>
-      <x>664</x>
-      <y>8</y>
+      <x>672</x>
+      <y>0</y>
       <width>149</width>
       <height>41</height>
      </rect>
@@ -516,25 +540,25 @@
        <height>41</height>
       </rect>
      </property>
-     <layout class="QHBoxLayout" name="horizontalLayout">
+     <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,1,1">
       <item>
        <widget class="QLabel" name="label_2">
         <property name="text">
-         <string>TextLabel</string>
+         <string/>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QLabel" name="label_3">
         <property name="text">
-         <string>TextLabel</string>
+         <string/>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QLabel" name="label_4">
         <property name="text">
-         <string>TextLabel</string>
+         <string/>
         </property>
        </widget>
       </item>
@@ -545,8 +569,8 @@
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>536</x>
-     <y>100</y>
+     <x>192</x>
+     <y>68</y>
      <width>121</width>
      <height>31</height>
     </rect>
@@ -557,6 +581,16 @@ border-color: rgb(240, 220, 255);</string>
    </property>
    <property name="text">
     <string>TextLabel</string>
+   </property>
+  </widget>
+  <widget class="QWidget" name="widget" native="true">
+   <property name="geometry">
+    <rect>
+     <x>388</x>
+     <y>40</y>
+     <width>251</width>
+     <height>120</height>
+    </rect>
    </property>
   </widget>
  </widget>

@@ -16,8 +16,20 @@
 #include <QTime>
 #include <QEventLoop>
 #include <QCoreApplication>
+#include <QDateTime>
+#include <QLocale>
 
 using namespace std;
+
+
+struct monthInfo
+{
+  int year;
+  int length;
+  int firstDay;
+  int lastDay;
+  int month;
+};
 
 namespace tool
 {
@@ -29,9 +41,11 @@ class ToolLib
 public:
   ToolLib(void);
   ~ToolLib();
-
-public:
+  int getWeekOrdinal(QString str);
   void Sleep(int msec);
+  int getMonthDay(int month, int year);
+  inline bool isLeapYear(int year);
+  monthInfo getMonthInfo(int month, int year);
 };
 
 #endif

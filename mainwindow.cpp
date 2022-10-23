@@ -9,7 +9,7 @@ MainWindow::MainWindow(QWidget *parent)
   ui->setupUi(this);
   this->setFixedSize(this->width(), this->height());
 
-  this->setQssFile();
+  // this->setQssFile();
   this->calendarWidget = new Calendar();
 
   connect(ui->openCalendar, SIGNAL(clicked()), this, SLOT(openCalendar_clicked()));

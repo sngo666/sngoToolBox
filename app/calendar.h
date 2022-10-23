@@ -2,6 +2,12 @@
 #define CALENDAR_H
 
 #include "toolCell.h"
+#include "toolLib.h"
+
+#include <map>
+#include <vector>
+#include <array>
+#include <cmath>
 
 #include <QtCore>
 #include <QtGlobal>
@@ -13,7 +19,6 @@
 #include <QFile>
 #include <QString>
 #include <QTextStream>
-#include <cmath>
 #include <QProcess>
 #include <QLabel>
 #include <QTimer>
@@ -22,16 +27,23 @@
 #include <QImage>
 #include <QFileDialog>
 #include <QDialog>
-#include <map>
-#include <vector>
-#include <array>
 #include <QGraphicsEffect>
+#include <QDateTime>
+#include <QLocale>
+#include <QListWidgetItem>
+#include <QListWidget>
+#include <QSize>
+#include <QScroller>
+#include <QAbstractItemView>
+
 using namespace std;
 
 namespace Ui
 {
   class Calendar;
 }
+
+
 
 class Calendar : public QWidget
 {
@@ -45,16 +57,20 @@ public:
   ~Calendar();
 
 private:
+  ToolLib *tool;
+  Ui::Calendar *ui;
   vector<vector<CalendarCell *>> calendarUnits;
+  int selectedMonth;
+  int selectedYear;
+  int selectedDay;
 
   void setShadow();
   void Init();
-
   void setQssFile();
-  vector<vector<CalendarCell *>> getCalendarUnits();
+  void refreshCalendarForm();
+  void createNote(noteInfo m_info);
 
-  ToolLib *tool;
-  Ui::Calendar *ui;
+  vector<vector<CalendarCell *>> getCalendarUnits();
 };
 
 #endif // CALENDAR_H

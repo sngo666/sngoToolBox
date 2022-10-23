@@ -6,7 +6,7 @@
 Calendar::Calendar(QWidget *parent) : QWidget(parent),
                                       ui(new Ui::Calendar)
 {
-
+  QLocale locale = QLocale::English;
   ui->setupUi(this);
   this->setWindowFlags(Qt::FramelessWindowHint | Qt::WindowSystemMenuHint | Qt::WindowMinimizeButtonHint);
   this->setFixedSize(this->width(), this->height());
@@ -14,7 +14,25 @@ Calendar::Calendar(QWidget *parent) : QWidget(parent),
   ui->calendarWidget->installEventFilter(this);
   tool = new ToolLib();
 
+  QDateTime currentTime = QDateTime::currentDateTime();
+  selectedYear = currentTime.date().year();
+  selectedMonth = currentTime.date().month();
+  selectedDay = currentTime.date().day();
+  ui->weekLabel->setText(locale.toString(currentTime, QString("ddd")));
   // this->setQssFile();
+
+  ui->noteListWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  ui->noteListWidget->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  // ui->noteListWidget->setViewMode(QListView::ListMode);
+  ui->noteListWidget->setFlow(QListView::TopToBottom);
+  QScroller::grabGesture(ui->noteListWidget, QScroller::LeftMouseButtonGesture);
+
+  NoteCell *testW = new NoteCell;
+  testW->resize(ui->noteListWidget->size().width(), ui->noteListWidget->size().height() / 4);
+  QListWidgetItem *item = new QListWidgetItem;
+  item->setSizeHint(QSize(ui->noteListWidget->size().width(), ui->noteListWidget->size().height() / 4));
+  ui->noteListWidget->addItem(item);
+  ui->noteListWidget->setItemWidget(item, testW);
 
   this->Init();
 }
@@ -30,23 +48,103 @@ void Calendar::setQssFile()
 void Calendar::Init()
 {
   this->calendarUnits = this->getCalendarUnits();
-  ui->calendarWidget->setStyleSheet("QWidget#calendarWidget{border-radius:20px;background-color:rgb(231, 255, 255);}");
-  QGraphicsDropShadowEffect *shadow = new QGraphicsDropShadowEffect();
-  shadow->setOffset(0, 0);
-  shadow->setColor(Qt::black);
-  shadow->setBlurRadius(10);
-  ui->calendarFormWidget->setGraphicsEffect(shadow);
+  ui->calendarWidget->setStyleSheet("QWidget#calendarWidget{border-radius:10px;background-color:rgb(231, 255, 255);}");
+  ui->noteWidget->setStyleSheet("QWidget#noteWidget{border-radius:10px;background-color:rgb(221, 224, 255);}");
+  ui->calendarFormWidget->setStyleSheet("QWidget#calendarFormWidget{border-radius:10px;background-color:rgb(221, 224, 255);}");
 
-  ui->calendarFormWidget->setStyleSheet("QWidget#calendarFormWidget{background-color:rgb(221, 224, 255);}");
+  QGraphicsDropShadowEffect *shadowFormWidget = new QGraphicsDropShadowEffect();
+  shadowFormWidget->setOffset(0, 0);
+  shadowFormWidget->setColor(Qt::black);
+  shadowFormWidget->setBlurRadius(10);
+  ui->calendarFormWidget->setGraphicsEffect(shadowFormWidget);
+
+  QGraphicsDropShadowEffect *shadowNoteWidget = new QGraphicsDropShadowEffect();
+  shadowNoteWidget->setOffset(0, 0);
+  shadowNoteWidget->setColor(Qt::black);
+  shadowNoteWidget->setBlurRadius(10);
+  ui->noteWidget->setGraphicsEffect(shadowNoteWidget);
+
   for (int i = 0; i < 8; i++)
   {
     for (int j = 0; j < 7; j++)
     {
       this->calendarUnits[i][j]->setStyleSheet("background-color: rgb(231, 255, 255);");
+      if (j == 0)
+      {
+        switch (i)
+        {
+        case 1:
+        {
+          this->calendarUnits[i][j]->setText("Mon");
+          break;
+        }
+        case 2:
+        {
+          this->calendarUnits[i][j]->setText("Tus");
+          break;
+        }
+        case 3:
+        {
+          this->calendarUnits[i][j]->setText("Wed");
+          break;
+        }
+        case 4:
+        {
+          this->calendarUnits[i][j]->setText("Thu");
+          break;
+        }
+        case 5:
+        {
+          this->calendarUnits[i][j]->setText("Fri");
+          break;
+        }
+        case 6:
+        {
+          this->calendarUnits[i][j]->setText("Sat");
+          break;
+        }
+        case 7:
+        {
+          this->calendarUnits[i][j]->setText("Sun");
+          break;
+        }
+        }
+      }
     }
   }
+  this->refreshCalendarForm();
 
   this->setShadow();
+}
+
+void Calendar::refreshCalendarForm()
+{
+  if (selectedMonth < 1 || selectedMonth > 12)
+    return;
+  monthInfo selectedMonthInfo = tool->getMonthInfo(selectedMonth, selectedYear);
+  int i = selectedMonthInfo.firstDay, j = 1;
+  int lastMonthLength = tool->getMonthDay((selectedMonth + 11) % 12, selectedYear);
+  for (int count = 1; count < selectedMonthInfo.firstDay; count++)
+  {
+    this->calendarUnits[selectedMonthInfo.firstDay - count][1]->setText(QString::number(lastMonthLength - count + 1));
+  }
+
+  for (int count = 1; count <= selectedMonthInfo.length; count++)
+  {
+    if (i > 7)
+    {
+      i = 1;
+      j++;
+    }
+    this->calendarUnits[i][j]->setText(QString::number(count));
+    i++;
+  }
+  i = 1;
+  for (int count = selectedMonthInfo.lastDay + 1; count <= 7; count++)
+  {
+    this->calendarUnits[count][6]->setText(QString::number(i));
+    i++;
+  }
 }
 
 void Calendar::setShadow()
@@ -93,6 +191,10 @@ bool Calendar::eventFilter(QObject *watched, QEvent *evt)
     }
   }
   return QWidget::eventFilter(watched, event);
+}
+
+void Calendar::createNote(noteInfo m_info)
+{
 }
 
 vector<vector<CalendarCell *>> Calendar::getCalendarUnits()

@@ -6,6 +6,8 @@ int CalendarCell::focused_y = -1;
 
 CalendarCell::CalendarCell(QWidget *parent) : QLabel(parent)
 {
+  setAlignment(Qt::AlignCenter);
+
   this->calendarMainWidget = parent->parent()->findChild<QGridLayout *>("calendarForm");
   this->tool = new ToolLib();
   mouseClicked = false;
@@ -24,8 +26,6 @@ void CalendarCell::enterEvent(QEvent *event)
                 "border-color: rgb(170, 170, 255);"
                 "background-color: rgb(215, 255, 226)");
   QString name = this->objectName();
-  setAlignment(Qt::AlignCenter);
-  this->setText(name);
 
   int flag = 0;
   QTimer *timer = new QTimer(this);
@@ -86,7 +86,6 @@ void CalendarCell::leaveEvent(QEvent *event)
   colorAnimation->start();
 
   // setStyleSheet("background-color: rgb(231, 255, 255);");
-  setAlignment(Qt::AlignCenter);
 
   if (this->calendarMainWidget->rowStretch(this->layoutPos.y) > 10 || this->calendarMainWidget->columnStretch(this->layoutPos.x) > 10)
   {
@@ -118,7 +117,7 @@ void CalendarCell::mousePressEvent(QMouseEvent *event)
 
   if (focused && focused_x == this->layoutPos.x && focused_y == this->layoutPos.y)
   {
-    this->setText("cond 1\n" + QString::number(focused_x) + " " + QString::number(focused_y));
+    // this->setText("cond 1\n" + QString::number(focused_x) + " " + QString::number(focused_y));
     focused = false;
     mouseClicked = false;
     focused_x = -1;
@@ -141,17 +140,18 @@ void CalendarCell::mousePressEvent(QMouseEvent *event)
       colAni->setKeyValueAt(0, this->calendarMainWidget->columnStretch(this->layoutPos.x));
       colAni->setKeyValueAt(1, 10);
 
-      setAlignment(Qt::AlignCenter);
-
       colAni->start();
       rowAni->start();
       connect(colAni, &QAbstractAnimation::finished, [=]()
-              { return; });
+              { 
+                setStyleSheet("border:2px solid;"
+                              "background-color: rgb(255, 214, 206);");
+                return; });
     }
   }
   else if (focused)
   {
-    this->setText("cond 2\n" + QString::number(focused_x) + " " + QString::number(focused_y));
+    // this->setText("cond 2\n" + QString::number(focused_x) + " " + QString::number(focused_y));
 
     CalendarCell *m_l = this->calendarMainWidget->parent()->findChild<CalendarCell *>(QString("L") + QString::number(focused_x) + QString("_") + QString::number(focused_y));
     m_l->setStyleSheet("border:0px;background-color: rgb(231, 255, 255)");
@@ -174,9 +174,8 @@ void CalendarCell::mousePressEvent(QMouseEvent *event)
 
     connect(colAni, &QAbstractAnimation::finished, [=]()
             {
-              setStyleSheet("border:2px solid;"
-                            "background-color: rgb(255, 214, 206);");
               focused_x = this->layoutPos.x;
+
               QPropertyAnimation *colAnimation = new QPropertyAnimation();
               colAnimation->setTargetObject(this);
               colAnimation->setPropertyName("colStr");
@@ -187,7 +186,8 @@ void CalendarCell::mousePressEvent(QMouseEvent *event)
               colAnimation->start(); });
     connect(rowAni, &QAbstractAnimation::finished, [=]()
             {
-              focused_y = this->layoutPos.y;
+               focused_y = this->layoutPos.y;
+
               QPropertyAnimation *rowAnimation = new QPropertyAnimation();
               rowAnimation->setTargetObject(this);
               rowAnimation->setPropertyName("rowStr");
@@ -196,15 +196,17 @@ void CalendarCell::mousePressEvent(QMouseEvent *event)
               rowAnimation->setKeyValueAt(0, this->calendarMainWidget->rowStretch(this->layoutPos.y));
               rowAnimation->setKeyValueAt(1, 18);
               rowAnimation->start(); });
-    setAlignment(Qt::AlignCenter);
 
     colAni->start();
     rowAni->start();
+
+    setStyleSheet("border:2px solid;"
+                  "background-color: rgb(255, 214, 206);");
     return;
   }
   else
   {
-    this->setText("cond 3\n" + QString::number(focused_x) + " " + QString::number(focused_y));
+    // this->setText("cond 3\n" + QString::number(focused_x) + " " + QString::number(focused_y));
     focused = true;
     focused_x = this->layoutPos.x;
     focused_y = this->layoutPos.y;
@@ -233,7 +235,6 @@ void CalendarCell::mousePressEvent(QMouseEvent *event)
 
     // QFont font("Microsoft YaHei", 30, 75);
     // setFont(font);
-    setAlignment(Qt::AlignCenter);
   }
 }
 
@@ -303,4 +304,31 @@ void CalendarCell::setColor_B(const int blue)
 {
   m_color_B = blue;
   setStyleSheet("background-color: rgb(231, 255, " + QString::number(m_color_B) + ");");
+}
+
+NoteCell::NoteCell(QWidget *parent) : QWidget(parent)
+{
+  setStyleSheet("border:2px solid;"
+                "background-color: rgb(100, 214, 206);");
+  QGridLayout * noteCellMainLayout;
+
+
+  noteCellMainLayout = new QGridLayout(this);
+}
+
+void NoteCell::setNoteInfo(noteInfo m_info)
+{
+  this->info.year = m_info.year;
+  this->info.month = m_info.month;
+  this->info.day = m_info.day;
+  this->info.hour = m_info.hour;
+  this->info.minute = m_info.minute;
+  this->info.needAlarm = m_info.needAlarm;
+  this->info.descryption = m_info.descryption;
+  this->info.title = m_info.title;
+}
+
+NoteCell::~NoteCell()
+{
+
 }
