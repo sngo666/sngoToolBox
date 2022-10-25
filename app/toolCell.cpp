@@ -308,15 +308,46 @@ void CalendarCell::setColor_B(const int blue)
 
 NoteCell::NoteCell(QWidget *parent) : QWidget(parent)
 {
-  setStyleSheet("border:2px solid;"
-                "background-color: rgb(100, 214, 206);");
-  QGridLayout * noteCellMainLayout;
 
+  setStyleSheet("#{border:2px solid;background-color: rgb(100, 214, 206);}");
 
-  noteCellMainLayout = new QGridLayout(this);
+  unitGroup.noteCellMainLayout = new QGridLayout(this);
+  unitGroup.noteCellMainLayout->setSpacing(0);
+  unitGroup.noteCellMainLayout->setContentsMargins(0, 0, 0, 0);
+
+  unitGroup.noteDescriWidget = new QLabel;
+  unitGroup.noteDescriWidget->setStyleSheet("background-color: rgb(237, 255, 244);");
+  unitGroup.noteTitleWidget = new QLabel;
+  unitGroup.noteTitleWidget->setStyleSheet("background-color: rgb(255, 240, 241);");
+  unitGroup.timeInfoWidget = new QWidget;
+  unitGroup.timeInfoWidget->setStyleSheet("background-color: rgb(255, 240, 241);");
+  unitGroup.buttonWidget = new QWidget;
+  unitGroup.buttonWidget->setStyleSheet("background-color: rgb(237, 255, 244);");
+
+  unitGroup.noteCellMainLayout->addWidget(unitGroup.noteTitleWidget, 0, 0, 1, 1);
+  unitGroup.noteCellMainLayout->addWidget(unitGroup.noteDescriWidget, 1, 0, 1, 1);
+  unitGroup.noteCellMainLayout->addWidget(unitGroup.timeInfoWidget, 1, 1, 1, 1);
+  unitGroup.noteCellMainLayout->addWidget(unitGroup.buttonWidget, 0, 1, 1, 1);
+
+  unitGroup.noteCellMainLayout->setRowStretch(0, 1);
+  unitGroup.noteCellMainLayout->setRowStretch(1, 3);
+  unitGroup.noteCellMainLayout->setColumnStretch(0, 7);
+  unitGroup.noteCellMainLayout->setColumnStretch(1, 3);
+
+  unitGroup.noteDescriWidget->setAlignment(Qt::AlignTop);
 }
 
-void NoteCell::setNoteInfo(noteInfo m_info)
+bool NoteCell::eventFilter(QObject *obj, QEvent *event)
+{
+  if (obj == this->unitGroup.noteTitleWidget)
+  {
+  }
+  else if (obj == this->unitGroup.noteDescriWidget)
+  {
+  }
+  return NoteCell::eventFilter(obj, event);
+}
+void NoteCell::setNoteInfo(NoteInfo m_info)
 {
   this->info.year = m_info.year;
   this->info.month = m_info.month;
@@ -326,9 +357,15 @@ void NoteCell::setNoteInfo(noteInfo m_info)
   this->info.needAlarm = m_info.needAlarm;
   this->info.descryption = m_info.descryption;
   this->info.title = m_info.title;
+
+  unitGroup.noteDescriWidget->setText(m_info.descryption);
+
+  if (m_info.title.size() > 30)
+    unitGroup.noteTitleWidget->setText(m_info.title.mid(0, 30) + "...");
+  else
+    unitGroup.noteTitleWidget->setText(m_info.title);
 }
 
 NoteCell::~NoteCell()
 {
-
 }

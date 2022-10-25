@@ -43,8 +43,6 @@ namespace Ui
   class Calendar;
 }
 
-
-
 class Calendar : public QWidget
 {
   Q_OBJECT
@@ -63,12 +61,13 @@ private:
   int selectedMonth;
   int selectedYear;
   int selectedDay;
+  NoteInfo testNoteInfo = {2022, 10, 25, 17, 58, "just a test just a test just a test just a test ", "remember this is just a test.", true};
 
   void setShadow();
   void Init();
   void setQssFile();
   void refreshCalendarForm();
-  void createNote(noteInfo m_info);
+  void createNote(NoteInfo m_info);
 
   vector<vector<CalendarCell *>> getCalendarUnits();
 };

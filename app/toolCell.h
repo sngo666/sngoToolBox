@@ -19,7 +19,19 @@
 #include <QCoreApplication>
 
 class ToolLib;
-struct noteInfo
+
+struct noteCellUnit
+{
+  QGridLayout *noteCellMainLayout;
+  QGridLayout *timeInfoLayout;
+  QGridLayout *buttonLayout;
+
+  QLabel *noteTitleWidget;
+  QLabel *noteDescriWidget;
+  QWidget *timeInfoWidget;
+  QWidget *buttonWidget;
+};
+struct NoteInfo
 {
   int year;
   int month;
@@ -91,7 +103,7 @@ public:
 
   ~NoteCell();
 
-  void setNoteInfo(noteInfo m_info);
+  void setNoteInfo(NoteInfo m_info);
   int getMonth() { return this->info.month; };
   int getYear() { return this->info.year; };
   int getHour() { return this->info.hour; };
@@ -100,7 +112,9 @@ public:
   bool getNeedAlarm() { return this->info.needAlarm; };
 
 private:
-  noteInfo info;
+  NoteInfo info;
+  noteCellUnit unitGroup;
+  bool eventFilter(QObject *obj, QEvent *event);
 };
 
 #endif // TOOLCELL_H

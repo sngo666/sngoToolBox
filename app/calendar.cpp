@@ -29,6 +29,8 @@ Calendar::Calendar(QWidget *parent) : QWidget(parent),
 
   NoteCell *testW = new NoteCell;
   testW->resize(ui->noteListWidget->size().width(), ui->noteListWidget->size().height() / 4);
+
+  testW->setNoteInfo(testNoteInfo);
   QListWidgetItem *item = new QListWidgetItem;
   item->setSizeHint(QSize(ui->noteListWidget->size().width(), ui->noteListWidget->size().height() / 4));
   ui->noteListWidget->addItem(item);
@@ -193,7 +195,7 @@ bool Calendar::eventFilter(QObject *watched, QEvent *evt)
   return QWidget::eventFilter(watched, event);
 }
 
-void Calendar::createNote(noteInfo m_info)
+void Calendar::createNote(NoteInfo m_info)
 {
 }
 
